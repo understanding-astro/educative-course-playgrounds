@@ -15,8 +15,14 @@ RUN curl -fsSL https://bun.sh/install | bash
 # Add bun to the PATH
 ENV PATH="/root/.bun/bin:${PATH}"
 
-# Copy the contents of your current directory into the /app directory in the container
-COPY . /
+# Install git 
+RUN apt-get update && apt-get install git -y
+
+# Clone required directories 
+RUN git clone https://github.com/understanding-astro/educative-course-playgrounds.git && cd educative-course-playgrounds
+
+# Copy the contents of the directories into the /app directory in the container
+# COPY educative-course-playgrounds /
 
 RUN apt-get install -y ca-certificates curl gnupg && \
     mkdir -p /etc/apt/keyrings && \
@@ -29,7 +35,17 @@ RUN NODE_MAJOR=18 && \
 
 RUN apt-get update && apt-get install nodejs -y
 
-RUN ls 
 
-RUN cd astro-beginner-project && bun install
+WORKDIR /educative-course-playgrounds
 
+RUN cd astro-beginner-project && bun install \
+    && cd .. && cd astro-integration-lifecycle-logs && bun install \
+    && cd .. && cd astro-integration-prerender-by-default && bun install \
+    && cd .. && cd astro-islands-showcase && bun install \
+    && cd .. && cd full-stack-astro && bun install \
+    && cd .. && cd hello-astro-integration && bun install \
+    && cd .. && cd react.dev-astro && bun install \
+    && cd .. && cd hello-astro && bun install \
+    && cd .. && cd ssr && bun install 
+
+WORKDIR /
