@@ -1,0 +1,28 @@
+---
+import { sleep } from "../sleep";
+
+const getSomeData = async () => {
+  await sleep(1000);
+  return "some data ";
+};
+
+const getSomeOtherData = async () => {
+  await sleep(2000);
+  return "another data";
+};
+
+const data = await getSomeData();
+const otherData = await getSomeOtherData();
+---
+
+<html>
+  <head>
+    <title>Product</title>
+  </head>
+  <body>
+    <h2>A name</h2>
+    <p>{data}</p>
+    <h2>A fact</h2>
+    <p>{getSomeOtherData}</p>
+  </body>
+</html>
